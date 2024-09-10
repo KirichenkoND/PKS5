@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ЭФБО-03-22',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
@@ -25,53 +26,48 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Никита")),
+      // appBar: AppBar(title: const Text("Никита")),
+      backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
 
           Image.network("https://i.pinimg.com/736x/11/b1/a1/11b1a1407248ed7e7e9919cbce18c525.jpg"),
 
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Container(color: Colors.amberAccent, width: 200, height: 100,
-                child: const Center(child: Text("2", style: TextStyle(fontSize: 30,)
-                )
-                ),
-              ),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: TextField(decoration: InputDecoration(
+              hintText: "Login",
+              border: OutlineInputBorder(),
+            ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Container(color: Colors.amberAccent, width: 200, height: 100,
-                child: const Center(child: Text("3", style: TextStyle(fontSize: 30,)
-                )
-                ),
-              ),
+
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: TextField(decoration: InputDecoration(
+              hintText: "Password",
+              border: OutlineInputBorder(),
+            ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Container(color: Colors.amberAccent, width: 200, height: 100,
-                child: const Center(child: Text("4", style: TextStyle(fontSize: 30,)
-                )
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Container(color: Colors.amberAccent, width: 200, height: 100,
-                child: const Center(child: Text("5", style: TextStyle(fontSize: 30,)
-                )
-                ),
-              ),
-            ),
-          ),
+
+          ElevatedButton(onPressed: (){}, child: const Text("LogIn")),
+
+        TextButton(onPressed: (){}, child: Text('Registration')),
+
+
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Center(
+          //     child: Container(color: Colors.amberAccent, width: 200, height: 100,
+          //       child: const Center(child: Text("5", style: TextStyle(fontSize: 30,)
+          //       )
+          //       ),
+          //     ),
+          //   ),
+          // ),
+
         ],
       ),
     );

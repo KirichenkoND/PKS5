@@ -2,8 +2,6 @@
 
 A new Flutter project.
 
-A new Flutter project.
-
 ## ПКС. Практическая работа 
 Кириченко Н.Д. ЭФБО-03-22
 

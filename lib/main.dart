@@ -23,52 +23,135 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
+    bool rememberMe = false;
     return Scaffold(
       // appBar: AppBar(title: const Text("Никита")),
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const SizedBox(height: 80),
+            // Заголовок
+            const Text(
+              'Авторизация',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
 
-          Image.network("https://i.pinimg.com/736x/11/b1/a1/11b1a1407248ed7e7e9919cbce18c525.jpg"),
-
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: TextField(decoration: InputDecoration(
-              hintText: "Login",
-              border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 120),
+
+
+            // Поле для ввода Логина
+            const TextField(
+              decoration: InputDecoration(
+                hintText: "Логин",
+                filled: true,
+                contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
-          ),
+            const SizedBox(height: 16),
 
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: TextField(decoration: InputDecoration(
-              hintText: "Password",
-              border: OutlineInputBorder(),
+            // Поле для ввода Пароля
+            const TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                hintText: "Пароль",
+                filled: true,
+                contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
+            const SizedBox(height: 8),
+
+            // Чекбокс "Запомнить меня"
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // Центрирование содержимого
+              children: [
+                Checkbox(
+                  value: rememberMe,
+                  onChanged: null,
+                ),
+                const Text(
+                  'Запомнить меня',
+                  style: TextStyle(
+                    color: Colors.grey, // Цвет, как у "Восстановить пароль"
+                    fontSize: 16
+                  ),
+                ),
+              ],
             ),
-          ),
-
-          ElevatedButton(onPressed: (){}, child: const Text("LogIn")),
-
-        TextButton(onPressed: (){}, child: Text('Registration')),
+            const SizedBox(height: 12),
 
 
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Center(
-          //     child: Container(color: Colors.amberAccent, width: 200, height: 100,
-          //       child: const Center(child: Text("5", style: TextStyle(fontSize: 30,)
-          //       )
-          //       ),
-          //     ),
-          //   ),
-          // ),
+            // Кнопка "Войти"
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text(
+                "Войти",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 16),
 
-        ],
+            // Кнопка "Регистрация"
+            TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  side: const BorderSide(color: Colors.blue, width: 2),
+                ),
+              ),
+              child: const Text(
+                'Регистрация',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            const SizedBox(height: 6),
+
+            // Ссылка "Восстановить пароль"
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                'Восстановить пароль',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 18
+                ),
+              ),
+            ),
+
+          ],
+        ),
       ),
     );
   }

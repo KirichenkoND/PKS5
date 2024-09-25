@@ -40,7 +40,13 @@ class ItemNote extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Image.network(imageUrl, height: 100), // Отображаем изображение
+              Image.network(
+                imageUrl,
+                height: 100,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(Icons.error, size: 100, color: Colors.red);
+                },
+              ), // Отображаем изображение
               const SizedBox(height: 10),
               Text(text, // Отображаем краткий текст
                   style: const TextStyle(color: Colors.white),

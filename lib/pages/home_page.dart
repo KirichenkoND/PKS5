@@ -1,5 +1,4 @@
 // pages/home_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/components/item_note.dart';
 import '../models/note.dart';
@@ -8,49 +7,26 @@ import 'note_page.dart';
 import 'add_note_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final Set<Note> favoriteNotes;
+  final Function(Note) onFavoriteToggle;
+
+  const HomePage({
+    Key? key,
+    required this.favoriteNotes,
+    required this.onFavoriteToggle,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Note> currentNotes = List.from(notes); // Копируем текущий список notes
+  List<Note> currentNotes = List.from(notes);
 
   void _addNote(Note note) {
     setState(() {
-      currentNotes.add(note); // Добавляем новый товар в список
+      currentNotes.add(note);
     });
-  }
-
-  // Функция для удаления товара
-  void _deleteNoteConfirmation(BuildContext context, int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Подтверждение удаления'),
-          content: const Text('Вы уверены, что хотите удалить этот товар?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Закрыть диалог без удаления
-              },
-              child: const Text('Отмена'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  currentNotes.removeAt(index); // Удаляем товар
-                });
-                Navigator.of(context).pop(); // Закрыть диалог
-              },
-              child: const Text('Удалить'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -59,7 +35,11 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("Витрина Айфонов"),
       ),
-      body: ListView.builder(
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.75,
+        ),
         itemCount: currentNotes.length,
         itemBuilder: (BuildContext context, int index) {
           final note = currentNotes[index];
@@ -68,7 +48,16 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotePage(note: note),
+                  builder: (context) => NotePage(
+                    note: note,
+                    onDelete: () {
+                      setState(() {
+                        currentNotes.removeAt(index);
+                        widget.favoriteNotes.remove(note);
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
               );
             },
@@ -80,13 +69,19 @@ class _HomePageState extends State<HomePage> {
                   imageUrl: note.imageUrl,
                 ),
                 Positioned(
-                  top: 16,
-                  right: 16,
+                  top: 8,
+                  right: 8,
                   child: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
+                    icon: Icon(
+                      widget.favoriteNotes.contains(note)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: widget.favoriteNotes.contains(note)
+                          ? Colors.red
+                          : Colors.grey,
+                    ),
                     onPressed: () {
-                      _deleteNoteConfirmation(
-                          context, index); // Подтверждение удаления
+                      widget.onFavoriteToggle(note);
                     },
                   ),
                 ),
@@ -101,7 +96,7 @@ class _HomePageState extends State<HomePage> {
             context,
             MaterialPageRoute(
               builder: (context) => AddNotePage(
-                onNoteAdded: _addNote, // Передача функции добавления
+                onNoteAdded: _addNote,
               ),
             ),
           );

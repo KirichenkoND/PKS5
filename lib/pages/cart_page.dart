@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Добавляем intl для форматирования чисел и цен
+import 'package:intl/intl.dart';
 import '../models/note.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class CartPage extends StatelessWidget {
   final Map<Note, int> cartItems;
@@ -18,18 +19,15 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Форматирование валюты
     final NumberFormat currencyFormat = NumberFormat.currency(
-      locale: 'ru_RU', // Задаем локаль для России (рубли)
-      symbol: '₽', // Символ рубля
-      decimalDigits: 2, // Оставляем два знака после запятой
+      locale: 'ru_RU',
+      symbol: '₽',
+      decimalDigits: 2,
     );
 
-    // Считаем общую сумму
     double totalAmount = cartItems.entries
         .fold(0, (sum, entry) => sum + entry.key.price * entry.value);
 
-    // Если корзина пуста
     if (cartItems.isEmpty) {
       return Scaffold(
         appBar: AppBar(title: const Text('Корзина')),
@@ -42,7 +40,6 @@ class CartPage extends StatelessWidget {
       );
     }
 
-    // Страница с корзиной
     return Scaffold(
       appBar: AppBar(title: const Text('Корзина')),
       body: ListView.builder(
@@ -51,31 +48,16 @@ class CartPage extends StatelessWidget {
           final note = cartItems.keys.elementAt(index);
           final quantity = cartItems[note]!;
 
-          // Форматируем цену и итоговую стоимость для товара
           final formattedPrice = currencyFormat.format(note.price);
           final formattedTotal = currencyFormat.format(note.price * quantity);
 
-          return ListTile(
-            leading: Image.network(note.imageUrl,
-                width: 50, height: 50, fit: BoxFit.cover),
-            title: Text(note.title),
-            subtitle: Text(
-                'Цена: $formattedPrice x $quantity = $formattedTotal'), // Красиво форматированная строка
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
+          return Slidable(
+            key: ValueKey(note),
+            startActionPane: ActionPane(
+              motion: const DrawerMotion(),
               children: [
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  onPressed: () => onRemove(note),
-                ),
-                Text('$quantity'),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => onAdd(note),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
+                SlidableAction(
+                  onPressed: (context) {
                     // Подтверждение удаления
                     showDialog(
                       context: context,
@@ -103,8 +85,33 @@ class CartPage extends StatelessWidget {
                       },
                     );
                   },
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                  label: 'Удалить',
                 ),
               ],
+            ),
+            child: ListTile(
+              leading: Image.network(note.imageUrl,
+                  width: 50, height: 50, fit: BoxFit.cover),
+              title: Text(note.title),
+              subtitle:
+                  Text('Цена: $formattedPrice x $quantity = $formattedTotal'),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: () => onRemove(note),
+                  ),
+                  Text('$quantity'),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () => onAdd(note),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -112,7 +119,7 @@ class CartPage extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text(
-          'Общая сумма: ${currencyFormat.format(totalAmount)}', // Форматируем общую сумму
+          'Общая сумма: ${currencyFormat.format(totalAmount)}',
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),

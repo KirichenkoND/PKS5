@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/note.dart';
-
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Добавляем intl для форматирования цен
+import 'package:intl/intl.dart';
 import '../models/note.dart';
 
 class NotePage extends StatelessWidget {
@@ -19,14 +16,12 @@ class NotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Форматирование цены
     final NumberFormat currencyFormat = NumberFormat.currency(
-      locale: 'ru_RU', // Локаль для России (рубли)
-      symbol: '₽', // Символ рубля
-      decimalDigits: 2, // Два знака после запятой
+      locale: 'ru_RU',
+      symbol: '₽',
+      decimalDigits: 2,
     );
 
-    // Форматированная цена
     final formattedPrice = currencyFormat.format(note.price);
 
     return WillPopScope(
@@ -64,9 +59,8 @@ class NotePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Добавляем цену товара
                 Text(
-                  'Цена: $formattedPrice', // Выводим форматированную цену
+                  'Цена: $formattedPrice',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -80,7 +74,6 @@ class NotePage extends StatelessWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    // Подтверждение удаления
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -122,14 +115,12 @@ class NotePage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Добавить в корзину'),
+                  child: Center(child: const Text('Добавить в корзину')),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () {
-                    // Логика для добавления в избранное
-                  },
-                  child: const Text('Добавить в избранное'),
+                  onPressed: () {},
+                  child: Center(child: const Text('Добавить в избранное')),
                 ),
               ],
             ),

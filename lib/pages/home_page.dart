@@ -9,18 +9,20 @@ import 'add_note_page.dart';
 class HomePage extends StatefulWidget {
   final Set<Note> favoriteNotes;
   final Function(Note) onFavoriteToggle;
+  final Function(Note) onAddToCart;
 
   const HomePage({
     Key? key,
     required this.favoriteNotes,
     required this.onFavoriteToggle,
+    required this.onAddToCart,
   }) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   List<Note> currentNotes = List.from(notes);
 
   void _addNote(Note note) {
@@ -57,6 +59,7 @@ class _HomePageState extends State<HomePage> {
                       });
                       Navigator.pop(context);
                     },
+                    onAddToCart: widget.onAddToCart,
                   ),
                 ),
               );
@@ -67,23 +70,10 @@ class _HomePageState extends State<HomePage> {
                   title: note.title,
                   text: note.text,
                   imageUrl: note.imageUrl,
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: IconButton(
-                    icon: Icon(
-                      widget.favoriteNotes.contains(note)
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: widget.favoriteNotes.contains(note)
-                          ? Colors.red
-                          : Colors.grey,
-                    ),
-                    onPressed: () {
-                      widget.onFavoriteToggle(note);
-                    },
-                  ),
+                  price: note.price,
+                  isFavorite: widget.favoriteNotes.contains(note),
+                  onToggleFavorite: () => widget.onFavoriteToggle(note),
+                  onAddToCart: () => widget.onAddToCart(note),
                 ),
               ],
             ),

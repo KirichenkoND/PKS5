@@ -6,11 +6,13 @@ import 'note_page.dart';
 class FavoritesPage extends StatelessWidget {
   final Set<Note> favoriteNotes;
   final Function(Note) onFavoriteToggle;
+  final Function(Note) onAddToCart;
 
   const FavoritesPage({
     Key? key,
     required this.favoriteNotes,
     required this.onFavoriteToggle,
+    required this.onAddToCart,
   }) : super(key: key);
 
   @override
@@ -20,55 +22,53 @@ class FavoritesPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Избранное'),
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75, // Adjust as needed
-        ),
-        itemCount: favoriteNotesList.length,
-        itemBuilder: (BuildContext context, int index) {
-          final note = favoriteNotesList[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NotePage(
-                    note: note,
-                    onDelete: () {
-                      // Optional: Remove from favorites on delete
-                      onFavoriteToggle(note);
-                      Navigator.pop(context);
-                    },
+      body: favoriteNotesList.isEmpty
+          ? Center(
+              child: Text(
+                'Ваше избранное пусто',
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            )
+          : GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.75,
+              ),
+              itemCount: favoriteNotesList.length,
+              itemBuilder: (BuildContext context, int index) {
+                final note = favoriteNotesList[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NotePage(
+                          note: note,
+                          onDelete: () {
+                            onFavoriteToggle(note);
+                            Navigator.pop(context);
+                          },
+                          onAddToCart: onAddToCart,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Stack(
+                    children: [
+                      ItemNote(
+                        title: note.title,
+                        text: note.text,
+                        imageUrl: note.imageUrl,
+                        price: note.price,
+                        isFavorite: favoriteNotes.contains(note),
+                        onToggleFavorite: () => onFavoriteToggle(note),
+                        onAddToCart: () => onAddToCart(note),
+                      ),
+                    ],
                   ),
-                ),
-              );
-            },
-            child: Stack(
-              children: [
-                ItemNote(
-                  title: note.title,
-                  text: note.text,
-                  imageUrl: note.imageUrl,
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      onFavoriteToggle(note);
-                    },
-                  ),
-                ),
-              ],
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

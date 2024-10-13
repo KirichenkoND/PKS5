@@ -1,22 +1,36 @@
 import 'package:flutter/material.dart';
 import '../models/note.dart';
 
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Добавляем intl для форматирования цен
+import '../models/note.dart';
+
 class NotePage extends StatelessWidget {
   final Note note;
   final VoidCallback onDelete;
+  final Function(Note) onAddToCart;
 
   const NotePage({
     Key? key,
     required this.note,
     required this.onDelete,
+    required this.onAddToCart,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Use a `WillPopScope` to handle back navigation if needed
+    // Форматирование цены
+    final NumberFormat currencyFormat = NumberFormat.currency(
+      locale: 'ru_RU', // Локаль для России (рубли)
+      symbol: '₽', // Символ рубля
+      decimalDigits: 2, // Два знака после запятой
+    );
+
+    // Форматированная цена
+    final formattedPrice = currencyFormat.format(note.price);
+
     return WillPopScope(
       onWillPop: () async {
-        // You can perform any additional actions here
         return true;
       },
       child: Scaffold(
@@ -50,6 +64,15 @@ class NotePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
+                // Добавляем цену товара
+                Text(
+                  'Цена: $formattedPrice', // Выводим форматированную цену
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
                 Text(
                   note.text,
                   style: const TextStyle(fontSize: 16),
@@ -57,7 +80,7 @@ class NotePage extends StatelessWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    // Confirm deletion
+                    // Подтверждение удаления
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -74,13 +97,10 @@ class NotePage extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                // Call the onDelete callback
                                 onDelete();
 
-                                // Close the dialog
                                 Navigator.of(context).pop();
 
-                                // Navigate back to the main page
                                 Navigator.of(context)
                                     .popUntil((route) => route.isFirst);
                               },
@@ -92,6 +112,24 @@ class NotePage extends StatelessWidget {
                     );
                   },
                   child: Center(child: const Text('Удалить')),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    onAddToCart(note);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${note.title} добавлен в корзину'),
+                      ),
+                    );
+                  },
+                  child: const Text('Добавить в корзину'),
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    // Логика для добавления в избранное
+                  },
+                  child: const Text('Добавить в избранное'),
                 ),
               ],
             ),

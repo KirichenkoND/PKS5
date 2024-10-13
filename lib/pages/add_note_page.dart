@@ -14,6 +14,7 @@ class _AddNotePageState extends State<AddNotePage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _imageUrlController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,17 +42,24 @@ class _AddNotePageState extends State<AddNotePage> {
                 controller: _imageUrlController,
                 decoration: const InputDecoration(labelText: 'URL изображения'),
               ),
+              TextField(
+                controller: _priceController,
+                decoration: const InputDecoration(labelText: 'Цена товара'),
+                keyboardType: TextInputType.number,
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   final String title = _titleController.text;
                   final String text = _textController.text;
                   final String imageUrl = _imageUrlController.text;
+                  final double? price = double.tryParse(_priceController.text);
 
                   if (title.isNotEmpty &&
                       text.isNotEmpty &&
-                      imageUrl.isNotEmpty) {
-                    final Note newNote = Note(title, text, imageUrl);
+                      imageUrl.isNotEmpty &&
+                      price != null) {
+                    final Note newNote = Note(title, text, imageUrl, price);
                     widget.onNoteAdded(newNote);
                     Navigator.pop(context);
                   }

@@ -31,7 +31,7 @@ class CartPage extends StatelessWidget {
     if (cartItems.isEmpty) {
       return Scaffold(
         appBar: AppBar(title: const Text('Корзина')),
-        body: Center(
+        body: const Center(
           child: Text(
             'Ваша корзина пуста',
             style: TextStyle(fontSize: 18, color: Colors.grey),
@@ -51,6 +51,11 @@ class CartPage extends StatelessWidget {
           final formattedPrice = currencyFormat.format(note.price);
           final formattedTotal = currencyFormat.format(note.price * quantity);
 
+          final imageUrl = note.imageUrl;
+          final isValidImageUrl = imageUrl.isNotEmpty &&
+              (imageUrl.startsWith('http://') ||
+                  imageUrl.startsWith('https://'));
+
           return Slidable(
             key: ValueKey(note),
             startActionPane: ActionPane(
@@ -58,7 +63,6 @@ class CartPage extends StatelessWidget {
               children: [
                 SlidableAction(
                   onPressed: (context) {
-                    // Подтверждение удаления
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -93,8 +97,25 @@ class CartPage extends StatelessWidget {
               ],
             ),
             child: ListTile(
-              leading: Image.network(note.imageUrl,
-                  width: 50, height: 50, fit: BoxFit.cover),
+              leading: isValidImageUrl
+                  ? Image.network(
+                      imageUrl,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.image_not_supported,
+                          size: 50,
+                          color: Colors.grey,
+                        );
+                      },
+                    )
+                  : const Icon(
+                      Icons.image_not_supported,
+                      size: 50,
+                      color: Colors.grey,
+                    ),
               title: Text(note.title),
               subtitle:
                   Text('Цена: $formattedPrice x $quantity = $formattedTotal'),

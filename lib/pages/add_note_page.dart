@@ -1,3 +1,4 @@
+// lib/pages/add_note_page.dart
 import 'package:flutter/material.dart';
 import '../models/note.dart';
 
@@ -15,6 +16,44 @@ class _AddNotePageState extends State<AddNotePage> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _imageUrlController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+
+  bool _isSubmitting = false;
+
+  void _submit() async {
+    final String title = _titleController.text;
+    final String text = _textController.text;
+    final String imageUrl = _imageUrlController.text;
+    final double? price = double.tryParse(_priceController.text);
+
+    if (title.isNotEmpty &&
+        text.isNotEmpty &&
+        imageUrl.isNotEmpty &&
+        price != null) {
+      final Note newNote = Note(title, text, imageUrl, price);
+
+      setState(() {
+        _isSubmitting = true;
+      });
+
+      try {
+        widget.onNoteAdded(newNote);
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка при добавлении товара: $e')),
+        );
+      } finally {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Пожалуйста, заполните все поля корректно')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +73,8 @@ class _AddNotePageState extends State<AddNotePage> {
               TextField(
                 controller: _textController,
                 decoration: const InputDecoration(labelText: 'Описание товара'),
-                maxLines: null, // Поле автоматически расширяется
-                keyboardType:
-                    TextInputType.multiline, // Поддержка переноса строки
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
               ),
               TextField(
                 controller: _imageUrlController,
@@ -48,24 +86,12 @@ class _AddNotePageState extends State<AddNotePage> {
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  final String title = _titleController.text;
-                  final String text = _textController.text;
-                  final String imageUrl = _imageUrlController.text;
-                  final double? price = double.tryParse(_priceController.text);
-
-                  if (title.isNotEmpty &&
-                      text.isNotEmpty &&
-                      imageUrl.isNotEmpty &&
-                      price != null) {
-                    final Note newNote = Note(title, text, imageUrl, price);
-                    widget.onNoteAdded(newNote);
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text('Добавить товар'),
-              ),
+              _isSubmitting
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _submit,
+                      child: const Text('Добавить товар'),
+                    ),
             ],
           ),
         ),
@@ -78,6 +104,7 @@ class _AddNotePageState extends State<AddNotePage> {
     _titleController.dispose();
     _textController.dispose();
     _imageUrlController.dispose();
+    _priceController.dispose();
     super.dispose();
   }
 }

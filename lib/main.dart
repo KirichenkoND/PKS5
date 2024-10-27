@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       HomePage(
         favoriteNotes: favoriteNotes,
         onFavoriteToggle: _toggleFavorite,
@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
 
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.grey,
         unselectedLabelStyle: const TextStyle(color: Colors.grey),

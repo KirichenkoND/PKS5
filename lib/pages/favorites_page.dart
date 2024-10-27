@@ -1,9 +1,10 @@
+// lib/pages/favorites_page.dart
 import 'package:flutter/material.dart';
 import '../models/note.dart';
 import '../components/item_note.dart';
 import 'note_page.dart';
 
-class FavoritesPage extends StatelessWidget {
+class FavoritesPage extends StatefulWidget {
   final Set<Note> favoriteNotes;
   final Function(Note) onFavoriteToggle;
   final Function(Note) onAddToCart;
@@ -16,14 +17,19 @@ class FavoritesPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _FavoritesPageState createState() => _FavoritesPageState();
+}
+
+class _FavoritesPageState extends State<FavoritesPage> {
+  @override
   Widget build(BuildContext context) {
-    final favoriteNotesList = favoriteNotes.toList();
+    final favoriteNotesList = widget.favoriteNotes.toList();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Избранное'),
       ),
       body: favoriteNotesList.isEmpty
-          ? Center(
+          ? const Center(
               child: Text(
                 'Ваше избранное пусто',
                 style: TextStyle(fontSize: 18, color: Colors.grey),
@@ -45,26 +51,27 @@ class FavoritesPage extends StatelessWidget {
                         builder: (context) => NotePage(
                           note: note,
                           onDelete: () {
-                            onFavoriteToggle(note);
+                            widget.onFavoriteToggle(note);
                             Navigator.pop(context);
                           },
-                          onAddToCart: onAddToCart,
+                          onAddToCart: widget.onAddToCart,
+                          onToggleFavorite: widget.onFavoriteToggle,
+                          isFavorite: true,
                         ),
                       ),
-                    );
+                    ).then((_) {
+                      setState(() {
+                      });
+                    });
                   },
-                  child: Stack(
-                    children: [
-                      ItemNote(
-                        title: note.title,
-                        text: note.text,
-                        imageUrl: note.imageUrl,
-                        price: note.price,
-                        isFavorite: favoriteNotes.contains(note),
-                        onToggleFavorite: () => onFavoriteToggle(note),
-                        onAddToCart: () => onAddToCart(note),
-                      ),
-                    ],
+                  child: ItemNote(
+                    title: note.title,
+                    text: note.text,
+                    imageUrl: note.imageUrl,
+                    price: note.price,
+                    isFavorite: widget.favoriteNotes.contains(note),
+                    onToggleFavorite: () => widget.onFavoriteToggle(note),
+                    onAddToCart: () => widget.onAddToCart(note),
                   ),
                 );
               },

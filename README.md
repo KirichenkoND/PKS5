@@ -25,3 +25,6 @@
 ![Alt-текст](/images/PKS5_6_18.png "СКРИНШОТ")
 ![Alt-текст](/images/PKS5_6_19.png "СКРИНШОТ")
 ![Alt-текст](/images/PKS5_6_20.png "СКРИНШОТ")
+![Alt-текст](/images/PKS5_6_21.png "СКРИНШОТ")
+![Alt-текст](/images/PKS5_6_22.png "СКРИНШОТ")
+![Alt-текст](/images/PKS5_6_23.png "СКРИНШОТ")

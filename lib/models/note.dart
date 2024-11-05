@@ -1,10 +1,10 @@
 // lib/models/note.dart
 class Note {
   final int? id;
-  final String title;
-  final String text;
-  final String imageUrl;
-  final double price;
+  String title;
+  String text;
+  String imageUrl;
+  double price;
 
   Note(this.title, this.text, this.imageUrl, this.price, {this.id});
 

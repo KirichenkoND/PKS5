@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/note.dart';
+import 'edit_note_page.dart'; // Импортируем страницу редактирования
 
 class NotePage extends StatefulWidget {
   final Note note;
@@ -48,6 +49,28 @@ class _NotePageState extends State<NotePage> {
     );
   }
 
+  void _navigateToEditPage() async {
+    final updatedNote = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditNotePage(note: widget.note),
+      ),
+    );
+
+    if (updatedNote != null && updatedNote is Note) {
+      // Обновляем данные товара после редактирования
+      setState(() {
+        widget.note.title = updatedNote.title;
+        widget.note.text = updatedNote.text;
+        widget.note.imageUrl = updatedNote.imageUrl;
+        widget.note.price = updatedNote.price;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${widget.note.title} успешно обновлён')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final NumberFormat currencyFormat = NumberFormat.currency(
@@ -68,6 +91,10 @@ class _NotePageState extends State<NotePage> {
               color: Colors.white,
             ),
             onPressed: _toggleFavorite,
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit), // Иконка карандаша
+            onPressed: _navigateToEditPage, // Обработчик нажатия
           ),
         ],
       ),
@@ -136,7 +163,7 @@ class _NotePageState extends State<NotePage> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: Center(child: const Text('Удалить')),
+                child: const Center(child: Text('Удалить')),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -147,7 +174,7 @@ class _NotePageState extends State<NotePage> {
                     ),
                   );
                 },
-                child: Center(child: const Text('Добавить в корзину')),
+                child: const Center(child: Text('Добавить в корзину')),
               ),
               const SizedBox(height: 8),
               Center(

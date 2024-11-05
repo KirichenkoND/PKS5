@@ -12,7 +12,7 @@
 | 4 | X | [Ссылка на ветку](https://github.com/KirichenkoND/PKS5/tree/Practice_4) |
 | 5 | X | [Ссылка на ветку](https://github.com/KirichenkoND/PKS5/tree/Practice_5) |
 | 6 | X | [Ссылка на ветку](https://github.com/KirichenkoND/PKS5/tree/Practice_6) |
-| 7 | X | [Ссылка на ветку](https://github.com/KirichenkoND//tree/Practice_7) |
+| 7 | X | [Ссылка на ветку](https://github.com/KirichenkoND/PKS5/tree/Practice_7) |
 | 8 | X | [Ссылка на ветку](https://github.com/KirichenkoND/PKS5/tree/Practice_8) |
 | 9 | X | [Ссылка на ветку](https://github.com/KirichenkoND/PKS5/tree/Practice_9) |
 | 10 | X | [Ссылка на ветку](https://github.com/KirichenkoND/PKS5/tree/Practice_10) |
